@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+//The complete response from flicker API
 public class FlickerResponse {
 
     @SerializedName("photos")
@@ -31,6 +32,22 @@ public class FlickerResponse {
 
         @SerializedName("photo")
         private List<FlickerPhoto> photos;
+
+        public int getPage() {
+            return page;
+        }
+
+        public int getPages() {
+            return pages;
+        }
+
+        public int getTotal() {
+            return total;
+        }
+
+        public List<FlickerPhoto> getPhotos() {
+            return photos;
+        }
 
         @NonNull
         @Override
