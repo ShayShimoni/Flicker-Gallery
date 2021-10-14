@@ -12,6 +12,25 @@ public class FlickerPhoto {
     @SerializedName("url_s")
     private String urlStr;
 
+    public String getId() {
+        return id;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public String getUrlStr() {
+        return urlStr;
+    }
+
+    public void setUrlStr(String urlStr) {
+        this.urlStr = urlStr;
+    }
 
     @NonNull
     @Override

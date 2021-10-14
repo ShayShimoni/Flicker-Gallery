@@ -17,6 +17,8 @@ import shay.s.flickergallery.model.FlickerResponse;
 import shay.s.flickergallery.repository.Repository;
 
 public class HomeViewModel extends ViewModel {
+    private static final String SUFFIX_PHOTO_SIZE_M = "_m"; //medium (240px)
+    private static final String SUFFIX_PHOTO_SIZE_Q = "_q"; // thumbnail (150px) + square shape
     private final MutableLiveData<FlickerResponse.PhotosAndInfo> photosAndInfoLiveData;
 
     public HomeViewModel() {
@@ -34,11 +36,19 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<FlickerResponse> call, @NonNull Response<FlickerResponse> response) {
                 FlickerResponse flickerResponse = response.body();
-                if (flickerResponse == null){
-                    Log.d("flickerResponse","Null Response");
+                if (flickerResponse == null)
                     return;
-                }
+
                 FlickerResponse.PhotosAndInfo photosAndInfo = flickerResponse.getPhotosAndInfo();
+
+                //Change the image size according to flicker api's URLs, for it to fit a thumbnail size.
+                for (FlickerPhoto flickerPhoto : photosAndInfo.getPhotos()) {
+                    String urlStr = flickerPhoto.getUrlStr();
+                    String[] splittedStr = urlStr.split(SUFFIX_PHOTO_SIZE_M);
+                    String newImageSizeStr = splittedStr[0] + SUFFIX_PHOTO_SIZE_Q + splittedStr[1];
+                    flickerPhoto.setUrlStr(newImageSizeStr);
+                }
+
                 photosAndInfoLiveData.postValue(photosAndInfo);
             }
 
