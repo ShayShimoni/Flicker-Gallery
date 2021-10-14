@@ -28,8 +28,9 @@ public class FlickerResponse {
     public static class PhotosAndInfo{
 
         private int page;
-        private int pages;
-        private int total;
+
+        @SerializedName("pages")
+        private int totalPages;
 
         @SerializedName("photo")
         private ArrayList<FlickerPhoto> photos;
@@ -38,25 +39,21 @@ public class FlickerResponse {
             return page;
         }
 
-        public int getPages() {
-            return pages;
-        }
-
-        public int getTotal() {
-            return total;
+        public int getTotalPages() {
+            return totalPages;
         }
 
         public ArrayList<FlickerPhoto> getPhotos() {
             return photos;
         }
 
+
         @NonNull
         @Override
         public String toString() {
-            return "\nPhotosAndInfo{" +
+            return "PhotosAndInfo{" +
                     "page=" + page +
-                    ", pages=" + pages +
-                    ", total=" + total +
+                    ", totalPages=" + totalPages +
                     ", photos=" + photos +
                     '}';
         }

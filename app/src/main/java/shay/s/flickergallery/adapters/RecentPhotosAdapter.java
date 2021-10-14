@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import shay.s.flickergallery.databinding.ListItemRecentPhotoBinding;
 import shay.s.flickergallery.model.FlickerPhoto;
@@ -39,6 +40,10 @@ public class RecentPhotosAdapter extends RecyclerView.Adapter<RecentPhotosAdapte
     @Override
     public int getItemCount() {
         return flickerPhotos.size();
+    }
+
+    public void addToList(List<FlickerPhoto> newPhotos){
+        flickerPhotos.addAll(newPhotos);
     }
 
     static class RecentPhotoViewHolder extends RecyclerView.ViewHolder {
