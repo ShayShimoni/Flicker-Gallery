@@ -1,13 +1,9 @@
 package shay.s.flickergallery.ui.home;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +40,8 @@ public class HomeViewModel extends ViewModel {
                 //Change the image size according to flicker api's URLs, for it to fit a thumbnail size.
                 for (FlickerPhoto flickerPhoto : photosAndInfo.getPhotos()) {
                     String urlStr = flickerPhoto.getUrlStr();
+                    if (urlStr == null)
+                        return;
                     String[] splittedStr = urlStr.split(SUFFIX_PHOTO_SIZE_M);
                     String newImageSizeStr = splittedStr[0] + SUFFIX_PHOTO_SIZE_Q + splittedStr[1];
                     flickerPhoto.setUrlStr(newImageSizeStr);
