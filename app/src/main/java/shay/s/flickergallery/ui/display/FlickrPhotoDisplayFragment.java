@@ -6,11 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import shay.s.flickergallery.R;
 import shay.s.flickergallery.databinding.FragmentFlickrPhotoDisplayBinding;
@@ -30,7 +33,14 @@ public class FlickrPhotoDisplayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.progressBar.setVisibility(View.VISIBLE);
         FlickrPhoto flickrPhoto = requireArguments().getParcelable(getString(R.string.bundle_key_photo));
-        Picasso.get().load(flickrPhoto.getUrlStr()).into(binding.ivDisplayedPhoto);
+        RequestCreator load = Picasso.get().load(flickrPhoto.getUrlStr());
+
+        new Handler().postDelayed(() ->{
+            load.into(binding.ivDisplayedPhoto);
+            binding.progressBar.setVisibility(View.GONE);
+        } ,1000);
+
     }
 }

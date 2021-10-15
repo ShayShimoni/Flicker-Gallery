@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        binding.progressBar.setVisibility(View.VISIBLE);
 
         //Init the RecycleView list.
         mHomeViewModel.getPhotosAndInfoLiveData().observe(getViewLifecycleOwner(), photosAndInfo -> {
@@ -48,6 +49,8 @@ public class HomeFragment extends Fragment {
             RecentPhotosAdapter recentPhotosAdapter = new RecentPhotosAdapter(photosAndInfo.getPhotos(), mHomeViewModel.getSelectedPhotoLiveData());
             binding.rvRecentPhotos.setAdapter(recentPhotosAdapter);
             binding.rvRecentPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+
+            binding.progressBar.setVisibility(View.GONE);
 
             binding.rvRecentPhotos.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
