@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/iv_photo"
             android:layout_width="200dp"
-            android:contentDescription="Flicker photo"
+            android:contentDescription="@string/flickr_photo_content_description"
             android:layout_height="200dp"
             app:srcCompat="@drawable/ic_launcher_foreground"
             tools:ignore="HardcodedText,VectorDrawableCompat" />

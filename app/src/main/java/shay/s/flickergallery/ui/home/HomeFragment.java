@@ -74,7 +74,8 @@ public class HomeFragment extends Fragment {
             mHomeViewModel.getSelectedPhotoLiveData().observe(getViewLifecycleOwner(), flickrPhoto -> {
                 if (flickrPhoto == null)
                     return;
-                
+
+
             });
         });
 
