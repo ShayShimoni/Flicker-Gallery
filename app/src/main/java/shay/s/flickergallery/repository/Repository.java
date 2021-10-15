@@ -3,7 +3,7 @@ package shay.s.flickergallery.repository;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import shay.s.flickergallery.model.FlickerResponse;
+import shay.s.flickergallery.model.FlickrResponse;
 
 //Shared object to manage the data fetching.
 public class Repository {
@@ -15,7 +15,7 @@ public class Repository {
     private static Repository repo;
 
     //The API service
-    private final FlickerService service;
+    private final FlickrService service;
 
     private Repository() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -23,7 +23,7 @@ public class Repository {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        service = retrofit.create(FlickerService.class);
+        service = retrofit.create(FlickrService.class);
     }
 
     public static Repository getRepo() {
@@ -32,11 +32,11 @@ public class Repository {
         return repo;
     }
 
-    public Call<FlickerResponse> getRecentPhotos(String method) {
+    public Call<FlickrResponse> getRecentPhotos(String method) {
         return service.getRecentPhotos(method);
     }
 
-    public Call<FlickerResponse> getNextPage(String method, int page) {
+    public Call<FlickrResponse> getNextPage(String method, int page) {
         return service.getNextPage(method, page);
     }
 }

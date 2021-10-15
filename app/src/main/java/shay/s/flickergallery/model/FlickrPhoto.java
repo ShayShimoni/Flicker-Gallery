@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FlickerPhoto {
+public class FlickrPhoto {
     private String  id;
     private String secret;
     private String server;

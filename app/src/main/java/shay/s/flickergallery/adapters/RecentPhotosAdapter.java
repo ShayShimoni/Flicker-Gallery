@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shay.s.flickergallery.databinding.ListItemRecentPhotoBinding;
-import shay.s.flickergallery.model.FlickerPhoto;
+import shay.s.flickergallery.model.FlickrPhoto;
 
 public class RecentPhotosAdapter extends RecyclerView.Adapter<RecentPhotosAdapter.RecentPhotoViewHolder> {
-    private ArrayList<FlickerPhoto> flickerPhotos;
+    private ArrayList<FlickrPhoto> flickrPhotos;
 
-    public RecentPhotosAdapter(ArrayList<FlickerPhoto> flickerPhotos) {
-        this.flickerPhotos = flickerPhotos;
+    public RecentPhotosAdapter(ArrayList<FlickrPhoto> flickrPhotos) {
+        this.flickrPhotos = flickrPhotos;
     }
 
     @NonNull
@@ -33,17 +33,17 @@ public class RecentPhotosAdapter extends RecyclerView.Adapter<RecentPhotosAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecentPhotoViewHolder holder, int position) {
-        FlickerPhoto flickerPhoto = flickerPhotos.get(position);
-        Picasso.get().load(flickerPhoto.getUrlStr()).into(holder.binding.ivPhoto);
+        FlickrPhoto flickrPhoto = flickrPhotos.get(position);
+        Picasso.get().load(flickrPhoto.getUrlStr()).into(holder.binding.ivPhoto);
     }
 
     @Override
     public int getItemCount() {
-        return flickerPhotos.size();
+        return flickrPhotos.size();
     }
 
-    public void addToList(List<FlickerPhoto> newPhotos){
-        flickerPhotos.addAll(newPhotos);
+    public void addToList(List<FlickrPhoto> newPhotos){
+        flickrPhotos.addAll(newPhotos);
     }
 
     static class RecentPhotoViewHolder extends RecyclerView.ViewHolder {

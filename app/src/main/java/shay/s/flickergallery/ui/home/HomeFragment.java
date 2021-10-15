@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mHomeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-
+        //Init the RecycleView list.
         mHomeViewModel.getPhotosAndInfoLiveData().observe(getViewLifecycleOwner(), photosAndInfo -> {
             totalPages = photosAndInfo.getTotalPages();
             page = photosAndInfo.getPage();
@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            //Make the list with continues scroll to the next page.
             mHomeViewModel.getNextPageLiveData().observe(getViewLifecycleOwner(), photosAndInfoNextPage -> {
                 int newSize = recentPhotosAdapter.getItemCount();
                 recentPhotosAdapter.addToList(photosAndInfoNextPage.getPhotos());

@@ -5,10 +5,9 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 //The complete response from flicker API
-public class FlickerResponse {
+public class FlickrResponse {
 
     @SerializedName("photos")
     private PhotosAndInfo photosAndInfo;
@@ -25,6 +24,7 @@ public class FlickerResponse {
                 '}';
     }
 
+
     public static class PhotosAndInfo{
 
         private int page;
@@ -33,7 +33,7 @@ public class FlickerResponse {
         private int totalPages;
 
         @SerializedName("photo")
-        private ArrayList<FlickerPhoto> photos;
+        private ArrayList<FlickrPhoto> photos;
 
         public int getPage() {
             return page;
@@ -43,7 +43,7 @@ public class FlickerResponse {
             return totalPages;
         }
 
-        public ArrayList<FlickerPhoto> getPhotos() {
+        public ArrayList<FlickrPhoto> getPhotos() {
             return photos;
         }
 

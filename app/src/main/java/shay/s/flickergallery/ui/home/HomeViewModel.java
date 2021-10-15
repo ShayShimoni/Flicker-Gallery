@@ -10,15 +10,15 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import shay.s.flickergallery.model.FlickerPhoto;
-import shay.s.flickergallery.model.FlickerResponse;
+import shay.s.flickergallery.model.FlickrPhoto;
+import shay.s.flickergallery.model.FlickrResponse;
 import shay.s.flickergallery.repository.Repository;
 
 public class HomeViewModel extends ViewModel {
     private static final String SUFFIX_PHOTO_SIZE_M = "_m"; //medium (240px)
     private static final String SUFFIX_PHOTO_SIZE_Q = "_q"; // thumbnail (150px) + square shape
-    private final MutableLiveData<FlickerResponse.PhotosAndInfo> photosAndInfoLiveData;
-    private final MutableLiveData<FlickerResponse.PhotosAndInfo> nextPageLiveData;
+    private final MutableLiveData<FlickrResponse.PhotosAndInfo> photosAndInfoLiveData;
+    private final MutableLiveData<FlickrResponse.PhotosAndInfo> nextPageLiveData;
 
     public HomeViewModel() {
         photosAndInfoLiveData = new MutableLiveData<>();
@@ -26,63 +26,64 @@ public class HomeViewModel extends ViewModel {
         initList();
     }
 
-    public LiveData<FlickerResponse.PhotosAndInfo> getPhotosAndInfoLiveData() {
+    public LiveData<FlickrResponse.PhotosAndInfo> getPhotosAndInfoLiveData() {
         return photosAndInfoLiveData;
     }
 
-    public LiveData<FlickerResponse.PhotosAndInfo> getNextPageLiveData() {
+    public LiveData<FlickrResponse.PhotosAndInfo> getNextPageLiveData() {
         return nextPageLiveData;
     }
 
     private void initList(){
-        Call<FlickerResponse> recentPhotos = Repository.getRepo().getRecentPhotos(Repository.METHOD_GET_RECENT);
-        recentPhotos.enqueue(new Callback<FlickerResponse>() {
+        Call<FlickrResponse> recentPhotos = Repository.getRepo().getRecentPhotos(Repository.METHOD_GET_RECENT);
+        recentPhotos.enqueue(new Callback<FlickrResponse>() {
             @Override
-            public void onResponse(@NonNull Call<FlickerResponse> call, @NonNull Response<FlickerResponse> response) {
-                FlickerResponse flickerResponse = response.body();
-                if (flickerResponse == null)
+            public void onResponse(@NonNull Call<FlickrResponse> call, @NonNull Response<FlickrResponse> response) {
+                FlickrResponse flickrResponse = response.body();
+                if (flickrResponse == null)
                     return;
 
-                FlickerResponse.PhotosAndInfo photosAndInfo = flickerResponse.getPhotosAndInfo();
+                FlickrResponse.PhotosAndInfo photosAndInfo = flickrResponse.getPhotosAndInfo();
                 changePhotoToThumbnail(photosAndInfo.getPhotos());
 
                 photosAndInfoLiveData.postValue(photosAndInfo);
             }
 
             @Override
-            public void onFailure(@NonNull Call<FlickerResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<FlickrResponse> call, @NonNull Throwable t) {
                 t.printStackTrace();
             }
         });
     }
 
     //Change the image size (according to flicker api's URLs) for it to fit a thumbnail size.
-    private void changePhotoToThumbnail(List<FlickerPhoto> photos){
-        for (FlickerPhoto flickerPhoto : photos) {
-            String urlStr = flickerPhoto.getUrlStr();
+    private void changePhotoToThumbnail(List<FlickrPhoto> photos){
+        for (FlickrPhoto flickrPhoto : photos) {
+            String urlStr = flickrPhoto.getUrlStr();
             if (urlStr == null)
                 return;
             String[] splittedStr = urlStr.split(SUFFIX_PHOTO_SIZE_M);
             String newImageSizeStr = splittedStr[0] + SUFFIX_PHOTO_SIZE_Q + splittedStr[1];
-            flickerPhoto.setUrlStr(newImageSizeStr);
+            flickrPhoto.setUrlStr(newImageSizeStr);
         }
     }
 
+
     public void getNextPage(String method, int page){
-        Repository.getRepo().getNextPage(method, page).enqueue(new Callback<FlickerResponse>() {
+        Repository.getRepo().getNextPage(method, page).enqueue(new Callback<FlickrResponse>() {
             @Override
-            public void onResponse(@NonNull Call<FlickerResponse> call, @NonNull Response<FlickerResponse> response) {
-                FlickerResponse flickerResponse = response.body();
-                if (flickerResponse == null)
+            public void onResponse(@NonNull Call<FlickrResponse> call, @NonNull Response<FlickrResponse> response) {
+                FlickrResponse flickrResponse = response.body();
+                if (flickrResponse == null)
                     return;
-                FlickerResponse.PhotosAndInfo photosAndInfo = flickerResponse.getPhotosAndInfo();
+                FlickrResponse.PhotosAndInfo photosAndInfo = flickrResponse.getPhotosAndInfo();
                 changePhotoToThumbnail(photosAndInfo.getPhotos());
 
                 nextPageLiveData.postValue(photosAndInfo);
             }
 
             @Override
-            public void onFailure(@NonNull Call<FlickerResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<FlickrResponse> call, @NonNull Throwable t) {
                 t.printStackTrace();
             }
         });
