@@ -19,10 +19,12 @@ public class HomeViewModel extends ViewModel {
     private static final String SUFFIX_PHOTO_SIZE_Q = "_q"; // thumbnail (150px) + square shape
     private final MutableLiveData<FlickrResponse.PhotosAndInfo> photosAndInfoLiveData;
     private final MutableLiveData<FlickrResponse.PhotosAndInfo> nextPageLiveData;
+    private final MutableLiveData<FlickrPhoto> selectedPhotoLiveData;
 
     public HomeViewModel() {
         photosAndInfoLiveData = new MutableLiveData<>();
         nextPageLiveData = new MutableLiveData<>();
+        selectedPhotoLiveData = new MutableLiveData<>();
         initList();
     }
 
@@ -32,6 +34,10 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<FlickrResponse.PhotosAndInfo> getNextPageLiveData() {
         return nextPageLiveData;
+    }
+
+    public MutableLiveData<FlickrPhoto> getSelectedPhotoLiveData() {
+        return selectedPhotoLiveData;
     }
 
     private void initList(){

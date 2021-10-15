@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 
 import shay.s.flickergallery.adapters.RecentPhotosAdapter;
 import shay.s.flickergallery.databinding.HomeFragmentBinding;
+import shay.s.flickergallery.model.FlickrPhoto;
 import shay.s.flickergallery.repository.Repository;
 
 public class HomeFragment extends Fragment {
@@ -41,7 +43,7 @@ public class HomeFragment extends Fragment {
             totalPages = photosAndInfo.getTotalPages();
             page = photosAndInfo.getPage();
 
-            RecentPhotosAdapter recentPhotosAdapter = new RecentPhotosAdapter(photosAndInfo.getPhotos());
+            RecentPhotosAdapter recentPhotosAdapter = new RecentPhotosAdapter(photosAndInfo.getPhotos(), mHomeViewModel.getSelectedPhotoLiveData());
             binding.rvRecentPhotos.setAdapter(recentPhotosAdapter);
             binding.rvRecentPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
@@ -60,13 +62,19 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            //Make the list with continues scroll to the next page.
+            //Makes the list with continues scroll to the next page.
             mHomeViewModel.getNextPageLiveData().observe(getViewLifecycleOwner(), photosAndInfoNextPage -> {
                 int newSize = recentPhotosAdapter.getItemCount();
                 recentPhotosAdapter.addToList(photosAndInfoNextPage.getPhotos());
                 recentPhotosAdapter.notifyItemRangeChanged(oldSize, newSize);
                 oldSize = newSize;
                 binding.progressBar.setVisibility(View.GONE);
+            });
+
+            mHomeViewModel.getSelectedPhotoLiveData().observe(getViewLifecycleOwner(), flickrPhoto -> {
+                if (flickrPhoto == null)
+                    return;
+                
             });
         });
 

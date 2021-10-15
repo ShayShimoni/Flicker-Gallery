@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -15,10 +16,12 @@ import shay.s.flickergallery.databinding.ListItemRecentPhotoBinding;
 import shay.s.flickergallery.model.FlickrPhoto;
 
 public class RecentPhotosAdapter extends RecyclerView.Adapter<RecentPhotosAdapter.RecentPhotoViewHolder> {
-    private ArrayList<FlickrPhoto> flickrPhotos;
+    private final ArrayList<FlickrPhoto> flickrPhotos;
+    private final MutableLiveData<FlickrPhoto> selectedPhotoLiveData;
 
-    public RecentPhotosAdapter(ArrayList<FlickrPhoto> flickrPhotos) {
+    public RecentPhotosAdapter(ArrayList<FlickrPhoto> flickrPhotos, MutableLiveData<FlickrPhoto> selectedPhotoLiveData) {
         this.flickrPhotos = flickrPhotos;
+        this.selectedPhotoLiveData = selectedPhotoLiveData;
     }
 
     @NonNull
@@ -35,6 +38,7 @@ public class RecentPhotosAdapter extends RecyclerView.Adapter<RecentPhotosAdapte
     public void onBindViewHolder(@NonNull RecentPhotoViewHolder holder, int position) {
         FlickrPhoto flickrPhoto = flickrPhotos.get(position);
         Picasso.get().load(flickrPhoto.getUrlStr()).into(holder.binding.ivPhoto);
+        holder.itemView.setOnClickListener(v -> selectedPhotoLiveData.postValue(flickrPhoto));
     }
 
     @Override
@@ -42,7 +46,7 @@ public class RecentPhotosAdapter extends RecyclerView.Adapter<RecentPhotosAdapte
         return flickrPhotos.size();
     }
 
-    public void addToList(List<FlickrPhoto> newPhotos){
+    public void addToList(List<FlickrPhoto> newPhotos) {
         flickrPhotos.addAll(newPhotos);
     }
 
