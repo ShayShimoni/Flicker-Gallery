@@ -17,6 +17,7 @@ import shay.s.flickergallery.repository.Repository;
 public class HomeViewModel extends ViewModel {
     private static final String SUFFIX_PHOTO_SIZE_M = "_m"; //medium (240px)
     private static final String SUFFIX_PHOTO_SIZE_Q = "_q"; // thumbnail (150px) + square shape
+    private static final String SUFFIX_PHOTO_SIZE_B = "_b"; // large (1024px)
     private final MutableLiveData<FlickrResponse.PhotosAndInfo> photosAndInfoLiveData;
     private final MutableLiveData<FlickrResponse.PhotosAndInfo> nextPageLiveData;
     private final MutableLiveData<FlickrPhoto> selectedPhotoLiveData;
@@ -40,7 +41,7 @@ public class HomeViewModel extends ViewModel {
         return selectedPhotoLiveData;
     }
 
-    private void initList(){
+    private void initList() {
         Call<FlickrResponse> recentPhotos = Repository.getRepo().getRecentPhotos(Repository.METHOD_GET_RECENT);
         recentPhotos.enqueue(new Callback<FlickrResponse>() {
             @Override
@@ -63,7 +64,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     //Change the image size (according to flicker api's URLs) for it to fit a thumbnail size.
-    private void changePhotoToThumbnail(List<FlickrPhoto> photos){
+    private void changePhotoToThumbnail(List<FlickrPhoto> photos) {
         for (FlickrPhoto flickrPhoto : photos) {
             String urlStr = flickrPhoto.getUrlStr();
             if (urlStr == null)
@@ -74,8 +75,18 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
+    //Change the image size to a large size.
+    public void changePhotoToLargeSize(FlickrPhoto flickrPhoto) {
+        String urlStr = flickrPhoto.getUrlStr();
+        if (urlStr == null || flickrPhoto.getUrlStr().contains(SUFFIX_PHOTO_SIZE_B))
+            return;
+        String[] splittedStr = urlStr.split(SUFFIX_PHOTO_SIZE_Q);
+        String newImageSizeStr = splittedStr[0] + SUFFIX_PHOTO_SIZE_B + splittedStr[1];
+        flickrPhoto.setUrlStr(newImageSizeStr);
+    }
 
-    public void getNextPage(String method, int page){
+
+    public void getNextPage(String method, int page) {
         Repository.getRepo().getNextPage(method, page).enqueue(new Callback<FlickrResponse>() {
             @Override
             public void onResponse(@NonNull Call<FlickrResponse> call, @NonNull Response<FlickrResponse> response) {

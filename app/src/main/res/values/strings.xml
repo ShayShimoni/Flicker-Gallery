@@ -7,5 +7,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="flickr_photo_content_description">Flickr Photo</string>
+    <string name="bundle_key_photo">photo</string>
 
 </resources>

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import shay.s.flickergallery.R;
 import shay.s.flickergallery.adapters.RecentPhotosAdapter;
 import shay.s.flickergallery.databinding.HomeFragmentBinding;
 import shay.s.flickergallery.model.FlickrPhoto;
@@ -74,8 +76,12 @@ public class HomeFragment extends Fragment {
             mHomeViewModel.getSelectedPhotoLiveData().observe(getViewLifecycleOwner(), flickrPhoto -> {
                 if (flickrPhoto == null)
                     return;
-
-
+                mHomeViewModel.changePhotoToLargeSize(flickrPhoto);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(getString(R.string.bundle_key_photo), flickrPhoto);
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_homeFragment_to_flickrPhotoDisplayFragment, bundle);
+                mHomeViewModel.getSelectedPhotoLiveData().postValue(null);
             });
         });
 

@@ -8,5 +8,14 @@
         android:id="@+id/homeFragment"
         android:name="shay.s.flickergallery.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_flickrPhotoDisplayFragment"
+            app:destination="@id/flickrPhotoDisplayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flickrPhotoDisplayFragment"
+        android:name="shay.s.flickergallery.ui.display.FlickrPhotoDisplayFragment"
+        android:label="fragment_flickr_photo_display"
+        tools:layout="@layout/fragment_flickr_photo_display" />
 </navigation>
