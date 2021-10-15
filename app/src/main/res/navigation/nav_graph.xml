@@ -16,6 +16,6 @@
     <fragment
         android:id="@+id/flickrPhotoDisplayFragment"
         android:name="shay.s.flickergallery.ui.display.FlickrPhotoDisplayFragment"
-        android:label="fragment_flickr_photo_display"
+        android:label=""
         tools:layout="@layout/fragment_flickr_photo_display" />
 </navigation>

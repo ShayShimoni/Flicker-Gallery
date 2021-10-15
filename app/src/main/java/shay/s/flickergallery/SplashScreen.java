@@ -1,5 +1,6 @@
 package shay.s.flickergallery;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -17,9 +18,14 @@ public class SplashScreen extends AppCompatActivity {
         binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar == null)
+            return;
+        supportActionBar.hide();
+
         new Handler().postDelayed(() ->{
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
-            finish();
+            mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(mainActivityIntent);
         } ,2000);
     }
