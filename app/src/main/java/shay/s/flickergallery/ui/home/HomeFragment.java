@@ -52,42 +52,51 @@ public class HomeFragment extends Fragment {
 
             binding.progressBar.setVisibility(View.GONE);
 
-            binding.rvRecentPhotos.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    //Checks if the user scrolled down and reached the end of the list.
-                    if (dy > 0 && !binding.rvRecentPhotos.canScrollVertically(RecyclerView.VERTICAL)) {
-                        if (page <= totalPages) {
-                            binding.progressBar.setVisibility(View.VISIBLE);
-                            mHomeViewModel.getNextPage(Repository.METHOD_GET_RECENT, ++page);
-                        }
-                    }
-                }
-            });
-
-            //Makes the list with continues scroll to the next page.
-            mHomeViewModel.getNextPageLiveData().observe(getViewLifecycleOwner(), photosAndInfoNextPage -> {
-                int newSize = recentPhotosAdapter.getItemCount();
-                recentPhotosAdapter.addToList(photosAndInfoNextPage.getPhotos());
-                recentPhotosAdapter.notifyItemRangeChanged(oldSize, newSize);
-                oldSize = newSize;
-                binding.progressBar.setVisibility(View.GONE);
-            });
-
-            mHomeViewModel.getSelectedPhotoLiveData().observe(getViewLifecycleOwner(), flickrPhoto -> {
-                if (flickrPhoto == null)
-                    return;
-                mHomeViewModel.changePhotoToLargeSize(flickrPhoto);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(getString(R.string.bundle_key_photo), flickrPhoto);
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_homeFragment_to_flickrPhotoDisplayFragment, bundle);
-                mHomeViewModel.getSelectedPhotoLiveData().postValue(null);
-            });
+            addScrollBehavior();
+            getNextPage(recentPhotosAdapter);
+            getSelectedPhotoAndNavigate();
         });
 
     }
 
+    //Checks if the user scrolled down, reached the end of the list, and request next page.
+    private void addScrollBehavior() {
+        binding.rvRecentPhotos.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0 && !binding.rvRecentPhotos.canScrollVertically(RecyclerView.VERTICAL)) {
+                    if (page <= totalPages) {
+                        binding.progressBar.setVisibility(View.VISIBLE);
+                        mHomeViewModel.getNextPage(Repository.METHOD_GET_RECENT, ++page);
+                    }
+                }
+            }
+        });
+    }
+
+    //Makes the list with continues scroll to the next page.
+    private void getNextPage(RecentPhotosAdapter recentPhotosAdapter) {
+        mHomeViewModel.getNextPageLiveData().observe(getViewLifecycleOwner(), photosAndInfoNextPage -> {
+            int newSize = recentPhotosAdapter.getItemCount();
+            recentPhotosAdapter.addToList(photosAndInfoNextPage.getPhotos());
+            recentPhotosAdapter.notifyItemRangeChanged(oldSize, newSize);
+            oldSize = newSize;
+            binding.progressBar.setVisibility(View.GONE);
+        });
+    }
+
+    private void getSelectedPhotoAndNavigate() {
+        mHomeViewModel.getSelectedPhotoLiveData().observe(getViewLifecycleOwner(), flickrPhoto -> {
+            if (flickrPhoto == null)
+                return;
+            mHomeViewModel.changePhotoToLargeSize(flickrPhoto);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(getString(R.string.bundle_key_photo), flickrPhoto);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_homeFragment_to_flickrPhotoDisplayFragment, bundle);
+            mHomeViewModel.getSelectedPhotoLiveData().postValue(null);
+        });
+    }
 }
